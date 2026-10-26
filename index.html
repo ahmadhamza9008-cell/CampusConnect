@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect | Opportunities</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="index.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="Logo" href="#">CampusConnect</a>
+        <p>Discover opportunities. Build your future.</p>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h1>Opportunities for students</h1>
+            <p>Discover scholarships, internships, events and training.</p>
+        </section>
+
+
+<section class="submission-section">
+  <h2>Share an Opportunity</h2>
+  <p>Help other students discover useful opportunities.</p>
+
+  <form id="opportunity-form">
+    <label for="title">Opportunity title</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="e.g. Web Development Internship"
+      minlength="5"
+      maxlength="100"
+      required
+    >
+
+    <label for="new-category">Category</label>
+    <select id="new-category" name="category" required>
+      <option value="">Select a category</option>
+      <option value="Scholarship">Scholarship</option>
+      <option value="Internship">Internship</option>
+      <option value="Event">Event</option>
+      <option value="Training">Training</option>
+    </select>
+
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
+      minlength="20"
+      maxlength="500"
+      placeholder="Explain what the opportunity offers..."
+      required
+    ></textarea>
+
+    <label for="deadline">Application deadline</label>
+    <input
+      type="date"
+      id="deadline"
+      name="deadline"
+      required
+    >
+
+    <label for="url">Official opportunity link</label>
+    <input
+      type="url"
+      id="url"
+      name="url"
+      placeholder="https://example.com/opportunity"
+      required
+    >
+
+    <button type="submit" class="card-button">
+      Submit Opportunity
+    </button>
+
+    <p id="form-message" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+
+        <section class="directory">
+            <label for="search">Search opportunities</label>
+            <input id="search" type="search" placeholder="Search by title or keyword">
+        
+            <label for="category">Choose a category</label>
+            <select id="category">
+                <option value="All">All categories</option>
+                <option value="Scholarship">Scholarships</option>
+                <option value="internship">Internships</option>
+                <option value="Events">Events</option>
+                <option value="Training">Training</option>
+            </select>
+
+            <p id="result-count" aria-live="polite"></p>
+            <div id="Opportunities-list" class="opportunity-list"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 CampusConnect. student opportunities directory.</p>
+    </footer>
+</body>
+</html>

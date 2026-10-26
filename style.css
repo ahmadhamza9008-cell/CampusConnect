@@ -1,0 +1,223 @@
+:root{
+    --primary-color: #14532d;
+    --background: #f4f7fa;
+    --surface: #ffffff;
+    --text: #1f2937;
+    --muted: #64748b;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.site-header{
+    background: var(--primary);
+    color: var(--accent);
+    padding: 24px 7%;
+}
+
+.logo{
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.site-header nav{
+    margin-bottom: 0;
+}
+
+main{
+    width: min(100% - 32px, 1000px);
+    margin: 3e2px auto;
+}
+
+.intro{
+    margin-bottom: 28px;    
+}
+
+directory{
+    display: grid;
+    gap: 12px;
+}
+
+input,
+select{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;;
+    border-radius: 8px;
+    background: white;
+    font:inherit;
+}
+
+.opportunity{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.opportunity-card{
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e2e8f0;
+}
+
+opportunity-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+opportunity-card h2{
+    margin: 8px 0;
+    font-size: 1.25rem;
+    line-height: 1.4;
+}
+
+.category{
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+
+.deadline{
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.card-button{
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s;
+    font:inherit;
+    cursor: pointer;
+}
+
+.card-button:hover{
+    background: #166534;   
+}
+
+.intro h1{
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.directory{
+   gap: 14px;
+}
+
+input:focus,
+select:focus{
+    outline: 2px  solid var(--primary);
+    outline-offset: 2px;
+}
+
+@media (max-width: 600px){
+    .site-header{
+        padding: 20px;;
+    }
+}
+
+main{
+    margin-top: 24px;
+}
+
+.opportunity-list{
+    display: grid;
+    gap: 16px;
+    margin-top: 12px;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.muted{
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+footer{
+    text-align: center;
+    padding: 24px 7%;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+
+/* Opportunity submission form */
+.submission-section {
+  margin: 36px 0;
+  padding: 24px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.submission-section h2 {
+  margin-top: 0;
+}
+
+#opportunity-form {
+  display: grid;
+  gap: 12px;
+}
+
+#opportunity-form label {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+#opportunity-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+}
+
+#opportunity-form input:focus,
+#opportunity-form select:focus,
+#opportunity-form textarea:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+#form-message {
+  margin-bottom: 0;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+#form-message.success {
+  color: #166534;
+}
+
+#form-message.error {
+  color: #b91c1c;
+}
