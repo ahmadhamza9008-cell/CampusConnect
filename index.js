@@ -1,4 +1,8 @@
+const saveOpportunities = JSON.parse(localStorage.getItem("campusconnect-Opportunities")) || [];
+
+
 const opportunities = [
+    ...saveOpportunities,
     {
         title: "Web Developmeent Workshop",
         category: "Training",
@@ -165,6 +169,8 @@ opportunityForm.addEventListener("submit", function (event) {
 
   // Add it to the current list.
   opportunities.unshift(newOpportunity);
+
+  localStorage.setItem("campusconnect-Opportunities", JSON.stringify(opportunities));
 
   // Refresh the visible cards.
   displayOpportunities();
