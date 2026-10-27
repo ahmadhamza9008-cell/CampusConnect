@@ -20,65 +20,38 @@
         </section>
 
 
-<section class="submission-section">
-  <h2>Share an Opportunity</h2>
-  <p>Help other students discover useful opportunities.</p>
+      <section class="submission-section">
+        <h2>Share an Opportunity</h2>
+        <p>Help other students discover useful opportunities.</p>
 
-  <form id="opportunity-form">
-    <label for="title">Opportunity title</label>
-    <input
-      type="text"
-      id="title"
-      name="title"
-      placeholder="e.g. Web Development Internship"
-      minlength="5"
-      maxlength="100"
-      required
-    >
+        <form id="opportunity-form">
+          <label for="title">Opportunity title</label>
+          <input type="text" id="title" name="title" placeholder="e.g. Web Development Internship" minlength="5" maxlength="100" required>
 
-    <label for="new-category">Category</label>
-    <select id="new-category" name="category" required>
-      <option value="">Select a category</option>
-      <option value="Scholarship">Scholarship</option>
-      <option value="Internship">Internship</option>
-      <option value="Event">Event</option>
-      <option value="Training">Training</option>
-    </select>
+          <label for="new-category">Category</label>
+          <select id="new-category" name="category" required>
+            <option value="">Select a category</option>
+            <option value="Scholarship">Scholarship</option>
+            <option value="Internship">Internship</option>
+            <option value="Event">Event</option>
+            <option value="Training">Training</option>
+          </select>
 
-    <label for="description">Description</label>
-    <textarea
-      id="description"
-      name="description"
-      rows="4"
-      minlength="20"
-      maxlength="500"
-      placeholder="Explain what the opportunity offers..."
-      required
-    ></textarea>
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4" minlength="20" maxlength="500" placeholder="Explain what the opportunity offers..." require></textarea>
 
-    <label for="deadline">Application deadline</label>
-    <input
-      type="date"
-      id="deadline"
-      name="deadline"
-      required
-    >
+          <label for="deadline">Application deadline</label>
+          <input type="date" id="deadline name="deadline" required>
 
-    <label for="url">Official opportunity link</label>
-    <input
-      type="url"
-      id="url"
-      name="url"
-      placeholder="https://example.com/opportunity"
-      required
-    >
+          <label for="url">Official opportunity link</label>
+          <input type="url" id="url" name="url" placeholder="https://example.com/opportunity" required>
 
-    <button type="submit" class="card-button">
-      Submit Opportunity
-    </button>
+          <button type="submit" class="card-button">
+            Submit Opportunity
+          </button>
 
-    <p id="form-message" role="status" aria-live="polite"></p>
-  </form>
+          <p id="form-message" role="status" aria-live="polite"></p>
+        </form>
 </section>
 
 
@@ -96,7 +69,7 @@
             </select>
 
             <p id="result-count" aria-live="polite"></p>
-            <div id="Opportunities-list" class="opportunity-list"></div>
+            <div id="opportunity-list"></div>
         </section>
     </main>
 

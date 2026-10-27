@@ -1,37 +1,40 @@
-const saveOpportunities = JSON.parse(localStorage.getItem("campusconnect-Opportunities")) || [];
-
+const saveOpportunities = JSON.parse(
+  localStorage.getItem("campusconnect-opportunities") || "[]"
+);
 
 const opportunities = [
-    ...saveOpportunities,
+  ...saveOpportunities,
+
+
     {
         title: "Web Developmeent Workshop",
         category: "Training",
         description: "A sample listing for beginnner web developers.",
-        deadline: "30 November 2026",
+        deadline: "2026-11-30",
     },
     {
         title: "Student Internship Programme",
         category: "Internship",
         description: "A sample listing for students seeking experience.",
-        deadline: "15 December 2026",
+        deadline: "2026-12-15",
     },
     {
         title: "Student Scholarship",
         category: "Scholarship",
         description: "A sample listing for technology events.",
-        deadline: "31 January 2027",
+        deadline: "2027-01-31",
     },
     {
         title: "Community Technology Meetup",
         category: "Event",
         description: "A sample listing for a tecchnologgy event.",
-        deadline: "10 February 2027",
+        deadline: "2027-02-10",
     }
 ];
 
 const searchInput = document.querySelector("#search");
 const categorySelect = document.querySelector("#category");
-const opportunitiesList = document.querySelector("#Opportunities-list");
+const opportunitiesList = document.querySelector("#opportunity-list");
 const resultCount = document.querySelector("#result-count");
 
 function displayOpportunities() {
@@ -42,47 +45,45 @@ function displayOpportunities() {
         const matchesSearch = 
     item.title.toLowerCase().includes(searchTerm) || 
     item.description.toLowerCase().includes(searchTerm);
-        const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
+        const matchesCategory = selectedCategory === "" || selectedCategory === "All" || item.category === selectedCategory;
 
         return matchesSearch && matchesCategory;
     });
 
     opportunitiesList.replaceChildren();
 
-    filtered.forEach(function(item) {
-        const card = document.createElement("div");
-        card.className += "opportunity-card";
+    filtered.forEach(function (item) {
+      const card = document.createElement("div");
+      card.className = "opportunity-card";
 
-        const category = document.createElement("p");
-        category.className = "category";
-        category.textContent = item.category;
+      const category = document.createElement("p");
+      category.className = "category";
+      category.textContent = item.category;
 
-        const title = document.createElement("h2");
-        title.textContent = item.title;
+      const title = document.createElement("h2");
+      title.textContent = item.title;
 
-        const description = document.createElement("p");
-        description.textContent = item.description;
+      const description = document.createElement("p");
+      description.textContent = item.description;
 
-        const deadline = document.createElement("p");
-        deadline.className = "deadline";
-        deadline.textContent = item.deadline;
+      const deadline = document.createElement("p");
+      deadline.className = "deadline";
+      deadline.textContent = item.deadline;
 
-        const button = document.createElement("a");
-        button.className = "card-button";
-        button.textContent = "View opportunity";
+      const button = document.createElement("a");
+      button.className = "card-button";
+      button.textContent = "View opportunity";
+      button.href = item.url || "#";
 
-        // Temporary demonstration link.
-        // Replace "#" with a verified opportunity URL
-        // when you have genuine listings.
-        button.href = "#";
+      if (item.url) {
+          button.target = "_blank";
+          button.rel = "noopener noreferrer";
+    }
 
-        card.append(category, title, description, deadline, button);
-        opportunityList.appendChild(card);
+    card.append(category, title, description, deadline, button);
+    opportunitiesList.appendChild(card);
 
-
-        card.append(category, title, description, deadline);
-        opportunitiesList.appendChild(card);
-    });
+});
 
     resultCount.textContent =
         `${filtered.length} opportunity(ies) found.`;
@@ -170,7 +171,7 @@ opportunityForm.addEventListener("submit", function (event) {
   // Add it to the current list.
   opportunities.unshift(newOpportunity);
 
-  localStorage.setItem("campusconnect-Opportunities", JSON.stringify(opportunities));
+  localStorage.setItem("campusconnect-opportunities", JSON.stringify(opportunities));
 
   // Refresh the visible cards.
   displayOpportunities();
