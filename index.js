@@ -1,193 +1,273 @@
-const saveOpportunities = JSON.parse(
-  localStorage.getItem("campusconnect-opportunities") || "[]"
+
+// ======================================
+// 1. SUPABASE CONNECTION
+// ======================================
+
+const SUPABASE_URL = "https://rntlrtuufsvtxrvbrghf.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_CKD8Mq88x4wrgaCLaw3zfg_sZG4n-Sa";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
 );
 
-const opportunities = [
-  ...saveOpportunities,
-
-
-    {
-        title: "Web Developmeent Workshop",
-        category: "Training",
-        description: "A sample listing for beginnner web developers.",
-        deadline: "2026-11-30",
-    },
-    {
-        title: "Student Internship Programme",
-        category: "Internship",
-        description: "A sample listing for students seeking experience.",
-        deadline: "2026-12-15",
-    },
-    {
-        title: "Student Scholarship",
-        category: "Scholarship",
-        description: "A sample listing for technology events.",
-        deadline: "2027-01-31",
-    },
-    {
-        title: "Community Technology Meetup",
-        category: "Event",
-        description: "A sample listing for a tecchnologgy event.",
-        deadline: "2027-02-10",
-    }
-];
+// ======================================
+// 2. HTML ELEMENTS
+// ======================================
 
 const searchInput = document.querySelector("#search");
 const categorySelect = document.querySelector("#category");
 const opportunitiesList = document.querySelector("#opportunity-list");
 const resultCount = document.querySelector("#result-count");
 
+const opportunityForm = document.querySelector("#opportunity-form");
+const formMessage = document.querySelector("#form-message");
+const deadlineInput = document.querySelector("#deadline");
+
+// Opportunities will now come from Supabase.
+let opportunities = [];
+
+// ======================================
+// 3. GET TODAY'S DATE
+// ======================================
+
+function getToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+if (deadlineInput) {
+    deadlineInput.min = getToday();
+}
+
+// ======================================
+// 4. DISPLAY OPPORTUNITIES
+// ======================================
+
 function displayOpportunities() {
+
     const searchTerm = searchInput.value.toLowerCase();
     const selectedCategory = categorySelect.value;
 
     const filtered = opportunities.filter(function(item) {
-        const matchesSearch = 
-    item.title.toLowerCase().includes(searchTerm) || 
-    item.description.toLowerCase().includes(searchTerm);
-        const matchesCategory = selectedCategory === "" || selectedCategory === "All" || item.category === selectedCategory;
+
+        const title = String(item.title || "");
+        const description = String(item.description || "");
+        const matchesSearch =
+            title.toLowerCase().includes(searchTerm) ||
+            description.toLowerCase().includes(searchTerm);
+
+        const matchesCategory =
+            selectedCategory === "" ||
+            selectedCategory === "All" ||
+            item.category === selectedCategory;
 
         return matchesSearch && matchesCategory;
     });
 
-    opportunitiesList.replaceChildren();
-
-    filtered.forEach(function (item) {
-      const card = document.createElement("div");
-      card.className = "opportunity-card";
-
-      const category = document.createElement("p");
-      category.className = "category";
-      category.textContent = item.category;
-
-      const title = document.createElement("h2");
-      title.textContent = item.title;
-
-      const description = document.createElement("p");
-      description.textContent = item.description;
-
-      const deadline = document.createElement("p");
-      deadline.className = "deadline";
-      deadline.textContent = item.deadline;
-
-      const button = document.createElement("a");
-      button.className = "card-button";
-      button.textContent = "View opportunity";
-      button.href = item.url || "#";
-
-      if (item.url) {
-          button.target = "_blank";
-          button.rel = "noopener noreferrer";
+    if (filtered.length === 0) {
+        opportunitiesList.textContent = "No opportunities match your search.";
+    } else {
+        opportunitiesList.replaceChildren();
     }
 
-    card.append(category, title, description, deadline, button);
-    opportunitiesList.appendChild(card);
+    filtered.forEach(function(item) {
 
-});
+        const card = document.createElement("div");
+        card.className = "opportunity-card";
+        const normalizedTitle = String(item.title || "Untitled opportunity");
+        const normalizedDescription = String(item.description || "");
+
+        const category = document.createElement("p");
+        category.className = "category";
+        category.textContent = String(item.category || "Other");
+
+        const cardTitle = document.createElement("h2");
+        cardTitle.textContent = normalizedTitle;
+
+        const description = document.createElement("p");
+        description.textContent = normalizedDescription;
+
+        const deadline = document.createElement("p");
+        deadline.className = "deadline";
+        deadline.textContent = item.deadline
+            ? `Deadline: ${item.deadline}`
+            : "Deadline not specified";
+
+        const button = document.createElement("a");
+        button.className = "card-button";
+        button.textContent = "View opportunity";
+        button.href = item.url || "#";
+
+        if (item.url) {
+            button.target = "_blank";
+            button.rel = "noopener noreferrer";
+        }
+
+        card.append(category, cardTitle, description, deadline, button);
+
+        opportunitiesList.appendChild(card);
+    });
 
     resultCount.textContent =
         `${filtered.length} opportunity(ies) found.`;
 }
 
+// ======================================
+// 5. LOAD OPPORTUNITIES FROM SUPABASE
+// ======================================
+
+async function loadOpportunities() {
+
+    opportunitiesList.textContent = "Loading opportunities...";
+
+   const { data, error } = await supabaseClient
+    .from("opportunities")
+    .select("*")
+    .eq("status", "approved")
+    .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error loading opportunities:", error.message);
+
+        opportunitiesList.textContent =
+            "Could not load opportunities. Please refresh the page.";
+
+        return;
+    }
+
+    opportunities = data || [];
+
+    console.log("Opportunities loaded from Supabase:", opportunities.length);
+
+    displayOpportunities();
+}
+
+// ======================================
+// 6. SEARCH AND CATEGORY FILTERS
+// ======================================
+
 searchInput.addEventListener("input", displayOpportunities);
+
 categorySelect.addEventListener("change", displayOpportunities);
 
-displayOpportunities();
+// ======================================
+// 7. HANDLE FORM SUBMISSION
+// ======================================
 
+opportunityForm.addEventListener("submit", async function(event) {
 
-const opportunityForm = document.querySelector("#opportunity-form");
-const formMessage = document.querySelector("#form-message");
-const deadlineInput = document.querySelector("#deadline");
+    event.preventDefault();
 
-// Prevent users from selecting a past deadline.
-function getToday() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
+    const title = document.querySelector("#title").value.trim();
 
-  return `${year}-${month}-${day}`;
-}
+    const category = document.querySelector("#new-category").value;
+    const validCategories = ["Scholarship", "Internship", "Event", "Training"];
+    if (!validCategories.includes(category)) {
+        showError("Please select a valid category.");
+        return;
+    }
 
-deadlineInput.min = getToday();
+    const description =
+        document.querySelector("#description").value.trim();
 
-// Handle form submission.
-opportunityForm.addEventListener("submit", function (event) {
-  event.preventDefault();
+    const deadline = deadlineInput.value;
 
-  // Read the values entered by the user.
-  const title = document.querySelector("#title").value.trim();
-  const category = document.querySelector("#new-category").value;
-  const description = document.querySelector("#description").value.trim();
-  const deadline = deadlineInput.value;
-  const url = document.querySelector("#url").value.trim();
+    const url = document.querySelector("#url").value.trim();
 
-  // Clear the previous message.
-  formMessage.textContent = "";
-  formMessage.className = "";
+    formMessage.textContent = "";
+    formMessage.className = "";
 
-  // Check the title.
-  if (title.length < 5) {
-    showError("The title must contain at least 5 characters.");
-    return;
-  }
+    // Check title
+    if (title.length < 5) {
+        showError("The title must contain at least 5 characters.");
+        return;
+    }
 
-  // Check the description.
-  if (description.length < 20) {
-    showError("Please write a description of at least 20 characters.");
-    return;
-  }
+    // Check description
+    if (description.length < 20) {
+        showError("Please write a description of at least 20 characters.");
+        return;
+    }
 
-  // Check the deadline.
-  if (!deadline || deadline < getToday()) {
-    showError("Please select today or a future deadline.");
-    return;
-  }
+    // Check deadline
+    if (!deadline || deadline < getToday()) {
+        showError("Please select today or a future deadline.");
+        return;
+    }
 
-  // Check the official link.
-  let validUrl;
+    // Check website link
+    let validUrl;
 
-  try {
-    validUrl = new URL(url);
-  } catch {
-    showError("Please enter a valid website link.");
-    return;
-  }
+    try {
+        validUrl = new URL(url);
+    } catch {
+        showError("Please enter a valid website link.");
+        return;
+    }
 
-  if (!["https:", "http:"].includes(validUrl.protocol)) {
-    showError("The link must start with https:// or http://.");
-    return;
-  }
+    if (!["https:", "http:"].includes(validUrl.protocol)) {
+        showError("The link must start with https:// or http://.");
+        return;
+    }
 
-  // Create the new opportunity.
-  const newOpportunity = {
-    title: title,
-    category: category,
-    description: description,
-    deadline: deadline,
-    url: validUrl.href
-  };
+    // Prepare the new opportunity
+    const newOpportunity = {
+        title: title,
+        category: category,
+        description: description,
+        deadline: deadline,
+        url: validUrl.href,
+        status: "pending"
+    };
 
-  // Add it to the current list.
-  opportunities.unshift(newOpportunity);
+    formMessage.textContent = "Saving opportunity...";
+    const submitButton = opportunityForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
 
-  localStorage.setItem("campusconnect-opportunities", JSON.stringify(opportunities));
+    // Save directly to Supabase
+    const { error } = await supabaseClient
+        .from("opportunities")
+        .insert(newOpportunity);
 
-  // Refresh the visible cards.
-  displayOpportunities();
+    if (error) {
+        console.error("Submission error:", error.message);
 
-  // Show a success message.
-  formMessage.textContent =
-    "Opportunity added successfully to this session!";
-  formMessage.className = "success";
+        showError("Could not save opportunity. Please try again.");
+        submitButton.disabled = false;
+        return;
+    }
 
-  // Clear the form.
-  opportunityForm.reset();
-  deadlineInput.min = getToday();
+    formMessage.textContent =
+        "Opportunity submitted successfully and is awaiting approval.";
+
+    formMessage.className = "success";
+
+    opportunityForm.reset();
+    submitButton.disabled = false;
+
+    if (deadlineInput) {
+        deadlineInput.min = getToday();
+    }
 });
 
-// Display an error message.
+// ======================================
+// 8. DISPLAY ERROR MESSAGES
+// ======================================
+
 function showError(message) {
-  formMessage.textContent = message;
-  formMessage.className = "error";
+
+    formMessage.textContent = message;
+    formMessage.className = "error";
 }
+
+// ======================================
+// 9. START CAMPUSCONNECT
+// ======================================
+
+loadOpportunities();

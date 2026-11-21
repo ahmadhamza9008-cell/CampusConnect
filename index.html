@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusConnect | Opportunities</title>
     <link rel="stylesheet" href="style.css">
-    <script src="index.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -38,10 +37,10 @@
           </select>
 
           <label for="description">Description</label>
-          <textarea id="description" name="description" rows="4" minlength="20" maxlength="500" placeholder="Explain what the opportunity offers..." require></textarea>
+          <textarea id="description" name="description" rows="4" minlength="20" maxlength="500" placeholder="Explain what the opportunity offers..." required></textarea>
 
           <label for="deadline">Application deadline</label>
-          <input type="date" id="deadline name="deadline" required>
+          <input type="date" id="deadline" name="deadline" required>
 
           <label for="url">Official opportunity link</label>
           <input type="url" id="url" name="url" placeholder="https://example.com/opportunity" required>
@@ -63,8 +62,8 @@
             <select id="category">
                 <option value="All">All categories</option>
                 <option value="Scholarship">Scholarships</option>
-                <option value="internship">Internships</option>
-                <option value="Events">Events</option>
+                <option value="Internship">Internships</option>
+                <option value="Event">Events</option>
                 <option value="Training">Training</option>
             </select>
 
@@ -74,7 +73,10 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 CampusConnect. student opportunities directory.</p>
+        <p>&copy; 2026 CampusConnect. Student opportunities directory.</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="index.js"></script>
 </body>
 </html>

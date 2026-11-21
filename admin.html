@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect | Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="admin-container">
+
+        <section id="login-section">
+            <h1>CampusConnect Admin</h1>
+
+            <p>Sign in to manage student opportunities.</p>
+
+            <form id="login-form">
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="Enter your admin email" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Enter your password" required>
+
+                <button type="submit">Sign In</button>
+
+                <p id="login-message" role="status" aria-live="polite"></p>
+
+            </form>
+        </section>
+
+        <section id="admin-dashboard" hidden>
+
+            <header class="dashboard-header">
+                <div>
+                    <h2>Dashboard</h2>
+                    <p id="admin-welcome"></p>
+                </div>
+                <button id="logout-button" type="button">Log Out</button>
+            </header>
+
+            <!-- DASHBOARD SUMMARY -->
+            <section class="dashboard-summary" aria-label="Opportunity summary">
+                <div class="summary-card">
+                    <h3>Total Opportunities</h3>
+                    <p id="total-count">Loading...</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Pending</h3>
+                    <p id="pending-count">Loading...</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Approved</h3>
+                    <p id="approved-count">Loading...</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Rejected</h3>
+                    <p id="rejected-count">Loading...</p>
+                </div>
+            </section>
+            <p id="dashboard-message" role="status" aria-live="polite"></p>
+
+            <section class="admin-panel">
+                <h3>Add an Opportunity</h3>
+                <form id="add-form">
+                    <label for="add-title">Title</label>
+                    <input type="text" id="add-title" minlength="5" maxlength="100" required>
+
+                    <label for="add-category">Category</label>
+                    <select id="add-category" required>
+                        <option value="">Select a category</option>
+                        <option value="Scholarship">Scholarship</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Event">Event</option>
+                        <option value="Training">Training</option>
+                    </select>
+
+                    <label for="add-description">Description</label>
+                    <textarea id="add-description" rows="4" minlength="20" maxlength="500" required></textarea>
+
+                    <label for="add-deadline">Deadline</label>
+                    <input type="date" id="add-deadline" required>
+
+                    <label for="add-url">Application Link</label>
+                    <input type="url" id="add-url" required>
+
+                    <label for="add-status">Initial status</label>
+                    <select id="add-status" required>
+                        <option value="approved" selected>Approved (visible publicly)</option>
+                        <option value="pending">Pending review</option>
+                    </select>
+
+                    <button type="submit">Add Opportunity</button>
+                    <p id="add-message" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+
+            <section class="admin-panel">
+                <h3>Manage Opportunities</h3>
+
+                <div class="admin-controls">
+                    <div class="filter-container">
+                        <label for="status-filter">Filter by Status</label>
+                        <select id="status-filter">
+                            <option value="all">All Opportunities</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-search">
+                        <label for="admin-search">Search opportunities</label>
+                        <input type="search" id="admin-search" placeholder="Search by title or category...">
+                    </div>
+                </div>
+
+                <form id="edit-form" hidden>
+                    <h3>Edit Opportunity</h3>
+
+                    <label for="edit-title">Title</label>
+                    <input type="text" id="edit-title" minlength="5" maxlength="100" required>
+
+                    <label for="edit-category">Category</label>
+                    <select id="edit-category" required>
+                        <option value="Internship">Internship</option>
+                        <option value="Scholarship">Scholarship</option>
+                        <option value="Training">Training</option>
+                        <option value="Event">Event</option>
+                    </select>
+
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" minlength="20" maxlength="500" required></textarea>
+
+                    <label for="edit-deadline">Deadline</label>
+                    <input type="date" id="edit-deadline" required>
+
+                    <label for="edit-url">Application Link</label>
+                    <input type="url" id="edit-url">
+
+                    <div class="form-actions">
+                        <button type="submit">Save Changes</button>
+                        <button type="button" id="cancel-edit">Cancel</button>
+                    </div>
+
+                    <p id="edit-message" role="status" aria-live="polite"></p>
+                </form>
+
+                <p id="admin-list-message" role="status" aria-live="polite"></p>
+                <div id="admin-opportunity-list"></div>
+            </section>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin.js"></script>
+
+</body>
+</html>
